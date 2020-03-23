@@ -10,8 +10,9 @@
 
 # Global variables
 DEVICE="$1"
-CLEAN="$2"
-CCACHE="$3"
+SYNC="$2"
+CLEAN="$3"
+CCACHE="$4"
 JOBS="$(($(nproc --all)-4))"
 
 function sync() {
@@ -49,19 +50,18 @@ function build_main() {
 }
 
 function build_end() {
-   if [ -f /mnt/FILES/workspace/jenkins/workspace/cesium-$DEVICE/out/target/product/$DEVICE/CesiumOS*.zip ]; then
-      cd /mnt/FILES/workspace/jenkins/workspace/cesium-$DEVICE/out/target/product/$DEVICE
+   if [ -f out/target/product/$DEVICE/CesiumOS*.zip ]; then
 	  #JSON="CesiumOS*.json" not used for now
-      sshpass -p $password rsync -avP -e ssh CesiumOS*.zip bunnyy@frs.sourceforge.net:/home/frs/project/CesiumOS/$DEVICE
-      status="passed"
+      sshpass -p $password rsync -avP -e ssh out/target/product/"$DEVICE"/CesiumOS*.zip bunnyy@frs.sourceforge.net:/home/frs/project/cesiumos/"$DEVICE" 
       exit 0
    else
-      status="failed"
       exit 1
    fi
 }
 
-sync
+if [ "$SYNC" = "true" ]; then 
+    sync
+fi
 use_ccache
 clean_up
 build_main

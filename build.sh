@@ -8,9 +8,6 @@
 #
 #
 
-# Haha yes some private keys 
-password=$(cat /mnt/FILES/cred** | grep sf | cut -d "=" -f 2)
-
 # Global variables
 DEVICE="$1"
 CLEAN="$2"
@@ -22,7 +19,7 @@ function sync() {
    git config --global user.email "sss.sonar2003@gmail.com"
    echo "Syncing Source, will take Little Time."
    repo init --depth=1 -u git://github.com/CesiumOS/manifest.git -b ten
-   repo sync -j"$JOBS" --current-branch --no-tags --no-clone-bundle --optimized-fetch --prune
+   repo sync -c -j"$JOBS" --no-tags --no-clone-bundle
    echo "Source Synced Successfully"
 }
 

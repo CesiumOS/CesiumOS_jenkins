@@ -15,7 +15,11 @@ CLEAN="$3"
 CCACHE="$4"
 JOBS="$(($(nproc --all)-4))"
 
+# Some private keys haha
+password=$(cat cred** | grep sf | cut -d "=" -f 2)
+
 function sync() {
+    # It's time to sync!
    git config --global user.name "SahilSonar"
    git config --global user.email "sss.sonar2003@gmail.com"
    echo "Syncing Source, will take Little Time."
@@ -34,7 +38,7 @@ function use_ccache() {
 }
 
 function clean_up() {
-  # Its Clean Time
+  # It's Clean Time
    if [ "$CLEAN" = "true" ]; then
       make clean && make clobber
    elif [ "$CLEAN" = "false" ]; then
@@ -44,13 +48,15 @@ function clean_up() {
 }
 
 function build_main() {
+  # It's build time! YASS
     source build/envsetup.sh
     lunch cesium_${DEVICE}-userdebug
     make bacon -j"$JOBS"
 }
 
 function build_end() {
-   if [ -f out/target/product/$DEVICE/CesiumOS*.zip ]; then
+  # It's upload time!
+   if [ -f "out/target/product/$DEVICE/CesiumOS*.zip"]; then
 	  #JSON="CesiumOS*.json" not used for now
       sshpass -p $password rsync -avP -e ssh out/target/product/"$DEVICE"/CesiumOS*.zip bunnyy@frs.sourceforge.net:/home/frs/project/cesiumos/"$DEVICE" 
       exit 0
@@ -59,7 +65,7 @@ function build_end() {
    fi
 }
 
-if [ "$SYNC" = "true" ]; then 
+if [ "$SYNC" = "true" ]; then
     sync
 fi
 use_ccache

@@ -18,6 +18,11 @@ JOBS="$(($(nproc --all)-4))"
 # Some private keys haha
 password=$(cat cred** | grep sf | cut -d "=" -f 2)
 
+function exports() {
+   export CUSTOM_BUILD_TYPE=OFFICIAL
+   export KBUILD_BUILD_HOST="NexusPenguin"
+}
+
 function sync() {
     # It's time to sync!
    git config --global user.name "SahilSonar"
@@ -56,7 +61,7 @@ function build_main() {
 
 function build_end() {
   # It's upload time!
-   if [ -f "out/target/product/$DEVICE/CesiumOS*.zip"]; then
+   if [ -f "out/target/product/$DEVICE/CesiumOS*.zip" ]; then
 	  #JSON="CesiumOS*.json" not used for now
       sshpass -p $password rsync -avP -e ssh out/target/product/"$DEVICE"/CesiumOS*.zip bunnyy@frs.sourceforge.net:/home/frs/project/cesiumos/"$DEVICE" 
       exit 0
@@ -68,6 +73,8 @@ function build_end() {
 if [ "$SYNC" = "true" ]; then
     sync
 fi
+
+exports
 use_ccache
 clean_up
 build_main

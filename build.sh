@@ -70,11 +70,10 @@ function build_end() {
    fi
 }
 
+exports
 if [ "$SYNC" = "true" ]; then
     sync
 fi
-
-exports
 use_ccache
 clean_up
 build_main

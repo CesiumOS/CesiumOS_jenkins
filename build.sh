@@ -15,9 +15,6 @@ CLEAN="$3"
 CCACHE="$4"
 JOBS="$(($(nproc --all)-4))"
 
-# Some private keys haha
-password=$(cat cred** | grep sf | cut -d "=" -f 2)
-
 function exports() {
    export CUSTOM_BUILD_TYPE=OFFICIAL
    export KBUILD_BUILD_HOST="NexusPenguin"
@@ -63,7 +60,7 @@ function build_end() {
   # It's upload time!
    if [ -f "out/target/product/$DEVICE/CesiumOS*.zip" ]; then
 	  #JSON="CesiumOS*.json" not used for now
-      sshpass -p $password rsync -avP -e ssh out/target/product/"$DEVICE"/CesiumOS*.zip bunnyy@frs.sourceforge.net:/home/frs/project/cesiumos/"$DEVICE" 
+      rsync -azP  -e ssh out/target/product/"$DEVICE"/CesiumOS*.zip bunnyy@frs.sourceforge.net:/home/frs/project/cesiumos/"$DEVICE"/
       exit 0
    else
       exit 1

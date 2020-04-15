@@ -58,13 +58,7 @@ function build_main() {
 
 function build_end() {
   # It's upload time!
-   if [ -f "out/target/product/$DEVICE/CesiumOS*.zip" ]; then
-	  #JSON="CesiumOS*.json" not used for now
       rsync -azP  -e ssh out/target/product/"$DEVICE"/CesiumOS*.zip bunnyy@frs.sourceforge.net:/home/frs/project/cesiumos/"$DEVICE"/
-      exit 0
-   else
-      exit 1
-   fi
 }
 
 exports

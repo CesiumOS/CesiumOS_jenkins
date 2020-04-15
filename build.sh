@@ -53,7 +53,7 @@ function build_main() {
   # It's build time! YASS
     source build/envsetup.sh
     lunch cesium_${DEVICE}-userdebug
-    make bacon -j"$JOBS"
+    mka bacon -j"$JOBS"
 }
 
 function build_end() {
